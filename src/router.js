@@ -1,7 +1,5 @@
 const express = require('express');
 const JWT = require('jsonwebtoken');
-const { PrismaClient } = require('@prisma/client'); // 👈 ADICIONE ESTA LINHA
-const prisma = new PrismaClient();
 const { cadastrarUsuario } = require('./cadastro');
 const { loginUsuario } = require('./login');
 const router = express.Router();
