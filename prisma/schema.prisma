@@ -17,6 +17,8 @@ model User {
   name       String?
   password   String   
   created_at DateTime @default(now())
+
+
 }
 
 model Clientes {
@@ -26,4 +28,5 @@ model Clientes {
   password   String 
   address    String?
   created_at DateTime @default(now())
+
 }

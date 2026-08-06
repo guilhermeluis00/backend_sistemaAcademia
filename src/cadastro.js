@@ -16,7 +16,7 @@ async function cadastrarUsuario(req, res) {
     let novoUsuario;
 
     // 2. Verifica o tipo e salva na tabela correspondente
-    if (role === 'owner') {
+    if (role === 'DONO') {
       novoUsuario = await prisma.user.create({
         data: {
           name,
@@ -24,7 +24,7 @@ async function cadastrarUsuario(req, res) {
           password: hashedPassword,
         },
       });
-    } else if (role === 'client') {
+    } else if (role === 'CLIENTE') {
       novoUsuario = await prisma.clientes.create({
         data: {
           nome: name, // Na tabela Clientes o campo é 'nome'

@@ -26,6 +26,11 @@ async function loginUsuario(req, res) {
       role = 'CLIENTE';
     }
 
+    // 🌟 REGRA VIP: Se o e-mail for o seu, ele muda o cargo para SUPER
+    if (user && emailFormatado === 'luisguilhermesaraivafeitosa@sistema.com') {
+      role = 'SUPER';
+    }
+
     // 3. Se não achou em nenhuma das duas tabelas, o e-mail não existe
     if (!user) {
       return res.status(401).json({ error: 'Credenciais inválidas.' });
