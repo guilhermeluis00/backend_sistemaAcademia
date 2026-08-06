@@ -16,8 +16,10 @@ model User {
   email      String   @unique
   name       String?
   password   String   
+  is_super_admin Boolean  @default(false)
   created_at DateTime @default(now())
-
+  planos         Plano[]
+  matriculas     Matricula[]  
 
 }
 
@@ -28,5 +30,31 @@ model Clientes {
   password   String 
   address    String?
   created_at DateTime @default(now())
+  matriculas     Matricula[]
+}
 
+
+model Plano {
+  id          String      @id @default(uuid())
+  nome        String      // Ex: Plano Mensal, Plano Anual
+  preco       Float       // Ex: 99.90
+  descricao   String?     // Ex: Acesso livre a todos os aparelhos
+  donoId      String      // ID do Dono da academia que criou o plano
+  dono        User        @relation(fields: [donoId], references: [id])
+  matriculas  Matricula[] 
+}
+
+model Matricula {
+  id          String    @id @default(uuid())
+  status      String    @default("ATIVO") // ATIVO, PENDENTE, CANCELADO
+  data        DateTime  @default(now())
+  
+  clienteId   String
+  cliente     Clientes  @relation(fields: [clienteId], references: [id])
+  
+  donoId      String    // ID da academia onde ele se matriculou
+  dono        User      @relation(fields: [donoId], references: [id])
+  
+  planoId     String
+  plano       Plano     @relation(fields: [planoId], references: [id])
 }

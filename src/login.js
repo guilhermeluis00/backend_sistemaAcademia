@@ -16,19 +16,20 @@ async function loginUsuario(req, res) {
     let user = await prisma.user.findUnique({
       where: { email: emailFormatado },
     });
+    
     let role = 'DONO';
 
-    // 2. Se não achar nos Donos, procura na tabela de Clientes
-    if (!user) {
+    if (user) {
+      // 🌟 Checa direto na coluna do banco de dados se a conta é Super Admin
+      if (user.is_super_admin) {
+        role = 'SUPER';
+      }
+    } else {
+      // 2. Se não achar nos Donos, procura na tabela de Clientes
       user = await prisma.clientes.findUnique({
         where: { email: emailFormatado },
       });
       role = 'CLIENTE';
-    }
-
-    // 🌟 REGRA VIP: Se o e-mail for o seu, ele muda o cargo para SUPER
-    if (user && emailFormatado === 'luisguilhermesaraivafeitosa@sistema.com') {
-      role = 'SUPER';
     }
 
     // 3. Se não achou em nenhuma das duas tabelas, o e-mail não existe
@@ -54,7 +55,7 @@ async function loginUsuario(req, res) {
     return res.json({
       message: 'Login realizado com sucesso!',
       token, 
-      role, // Informa ao front se é DONO ou CLIENTE
+      role, // Informa ao front se é SUPER, DONO ou CLIENTE
       user: {
         id: user.id,
         name: user.name || user.nome, // Pega 'name' (User) ou 'nome' (Clientes)
