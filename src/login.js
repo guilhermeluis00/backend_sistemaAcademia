@@ -20,7 +20,7 @@ async function loginUsuario(req, res) {
     let role = 'DONO';
 
     if (user) {
-      // 🌟 Checa direto na coluna do banco de dados se a conta é Super Admin
+      //  Checa direto na coluna do banco de dados se a conta é Super Admin
       if (user.is_super_admin) {
         role = 'SUPER';
       }
