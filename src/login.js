@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken'); // Importa o jsonwebtoken
 const prisma = require('./lib/prisma');
+const { gerarToken } = require('./middleware/auth');
 
 async function loginUsuario(req, res) {
   const { email, password } = req.body;
@@ -45,11 +45,7 @@ async function loginUsuario(req, res) {
     }
 
     // 5. GERANDO O TOKEN JWT (Guardamos o ID e o role no payload)
-    const token = jwt.sign(
-      { userId: user.id, role: role }, 
-      process.env.JWT_SECRET, 
-      { expiresIn: '365d' } // Tempo de expiração do token 
-    );
+    const token = gerarToken(user.id, role);
 
     // 6. Retorna o token, o papel (role) e os dados do usuário para o front-end
     return res.json({

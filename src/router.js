@@ -1,5 +1,5 @@
 const express = require('express');
-const { autenticar } = require('./auth');
+const { autenticar, sessaoAtual } = require('./middleware/auth');
 const { cadastrarUsuario } = require('./cadastro');
 const { loginUsuario } = require('./login');
 const { criarPlano, listarMeusPlanos, atualizarPlano, excluirPlano } = require('./planos');
@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.post('/cadastro', cadastrarUsuario);
 router.post('/login', loginUsuario);
+router.get('/sessao', autenticar(), sessaoAtual);
 
 // Vitrine pública de academias e seus planos
 router.get('/academias', listarAcademias);
