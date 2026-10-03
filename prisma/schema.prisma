@@ -39,6 +39,9 @@ model Plano {
   nome        String      // Ex: Plano Mensal, Plano Anual
   preco       Float       // Ex: 99.90
   descricao   String?     // Ex: Acesso livre a todos os aparelhos
+  duracaoMeses Int        @default(1)    // 1 = mensal, 3 = trimestral, 12 = anual...
+  ativo       Boolean     @default(true) // Planos desativados somem da vitrine, mas preservam as matrículas
+  criadoEm    DateTime    @default(now())
   donoId      String      // ID do Dono da academia que criou o plano
   dono        User        @relation(fields: [donoId], references: [id])
   matriculas  Matricula[] 
@@ -48,6 +51,9 @@ model Matricula {
   id          String    @id @default(uuid())
   status      String    @default("ATIVO") // ATIVO, PENDENTE, CANCELADO
   data        DateTime  @default(now())
+  validade    DateTime? // Até quando a matrícula vale (data + duração do plano)
+  valor       Float?    // Preço pago no momento da compra
+  formaPagamento String? // PIX, CARTAO ou BOLETO
   
   clienteId   String
   cliente     Clientes  @relation(fields: [clienteId], references: [id])
